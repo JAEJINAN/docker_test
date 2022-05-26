@@ -6,34 +6,41 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./usr/src/app:/usr/src/app
-      - ./nginx:/etc/nginx/conf.d
+      - ./src:/src
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - web
   web:
     build:
-      context: .
+      context: ./
       dockerfile: Dockerfile
     container_name: webV1
     command: bash - "
       python3 manage.py collectstatic --no-input &&
       python3 manage.py makemigrations &&
       python3 manage.py migrate &&
-      gunicorn config.wsgi:application --bind 0:80"
+      gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
-      - ./usr/src/app:/usr/src/app
-    expose:
-      - "8000"
+      - ./src:/src
     depends_on:
       - db
+    ports:
+      - 8000:8000
   db:
     image: mysql:latest
     container_name: mysql
+    restart: always
     expose:
       - "3306"
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_DATABASE: db
       MYSQL_USER: admin
       MYSQL_PASSWORD: 4354
       MYSQL_ROOT_PASSWORD: 4354
+    volumes:
+      - ./database/mysql_data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
