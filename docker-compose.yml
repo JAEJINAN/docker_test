@@ -8,7 +8,11 @@ services:
     volumes:
       - .:/src
     command:
-      - wait-for-it.sh db:3306 -t 10
+      - bash
+      - -c
+      - |
+        ./wait-for-it.sh db:3306 -t 10
+        python manage.py runserver
     depends_on:
       - db
     ports:
