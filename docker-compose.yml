@@ -1,0 +1,37 @@
+version: "3"
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80/tcp"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./static:/staticfiles
+    depends_on:
+      - web
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webV1
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./static:/usr/src/app/staticfiles
+    expose:
+      - "8000"
+    depends_on:
+      - db
+  db:
+    image: mysql:latest
+    container_name: mysql
+    expose:
+      - "3306"
+    environment:
+      MYSQL_DATABASE: ssac_server
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 4354
+      MYSQL_ROOT_PASSWORD: 4354
+    volumes:
+      - ../db/data:/var/lib/mysql
+      - ../db/data/conf.d:/etc/mysql/conf.d

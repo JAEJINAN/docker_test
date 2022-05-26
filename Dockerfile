@@ -1,14 +1,12 @@
-FROM python:3.8.9
+FROM python:3.8
 
-WORKDIR /apps
+ENV PYTHONUNBUFFERED 1
 
-COPY . /app/
+WORKDIR /usr/src/app
+
 COPY requirements.txt ./
 
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-# RUN pipwin install pyaudio
+RUN pip3 install --upgrade pip
+RUN pip3 install -r requirements.txt
 
-EXPOSE 8000
-
-CMD ["python", "manage.py", "runserver"]
+COPY . .
