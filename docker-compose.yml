@@ -7,10 +7,12 @@ services:
     container_name: webV1
     volumes:
       - ./src:/src
-    command: bash - "
-      python3 manage.py makemigrations &&
-      python3 manage.py migrate &&
-      python3 manage.py runserver 0:8000"
+    command:
+      - bash
+      - -c
+      - |
+        /wait-for-it.sh db:3306 -t 10
+        python3 manage.py runserver 0:8000
     depends_on:
       - db
     ports:
