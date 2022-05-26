@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/usr/src/app/_static
+      - media_volume:/usr/src/app/_media
+    ports:
+      - 80:80
+    depends_on:
+      - web
+  web:
+    build: .
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/usr/src/app/_static
+      - media_volume:/usr/src/app/_media
+      - ./:/usr/src/app/
+    expose:
+      - 8000
+    depends_on:
+      - db
+  db:
+    image: mysql:latest
+    volumes:
+      - mysql_data:/var/lib/maysql/data/
+    environment:
+      MYSQL_DATABASE: db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 4354
+      MYSQL_ROOT_PASSWORD: 4354
+volumes:
+  mysql_data:
+  static_volume:
+  media_volume:
