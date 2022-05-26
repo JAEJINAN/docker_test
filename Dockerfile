@@ -6,9 +6,7 @@ ENV PYTHONIOENCODING=utf-8
 
 WORKDIR /src
 
-COPY requirements.txt ./
+COPY . .
 
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
-
-COPY . .
