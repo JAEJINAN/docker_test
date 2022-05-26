@@ -4,7 +4,7 @@ services:
     image: nginx:latest
     container_name: nginx
     ports:
-      - "80:80/tcp"
+      - "80:80"
     volumes:
       - ./usr/src/app:/usr/src/app
       - ./nginx:/etc/nginx/conf.d
@@ -33,10 +33,7 @@ services:
     expose:
       - "3306"
     environment:
-      MYSQL_DATABASE: ssac_server
-      MYSQL_USER: root
+      MYSQL_DATABASE: db
+      MYSQL_USER: admin
       MYSQL_PASSWORD: 4354
       MYSQL_ROOT_PASSWORD: 4354
-    volumes:
-      - ../db/data:/var/lib/mysql
-      - ../db/data/conf.d:/etc/mysql/conf.d
