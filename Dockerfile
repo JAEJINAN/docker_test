@@ -4,9 +4,13 @@ ENV PYTHONUNBUFFERED 1
 
 ENV PYTHONIOENCODING=utf-8
 
+RUN mkdir /src
+
 WORKDIR /src
 
-COPY . .
+COPY . /src
 
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
+
+CMD ["python3", "manage.py", "runserver"]
