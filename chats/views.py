@@ -5,6 +5,7 @@ from rest_framework.parsers import JSONParser
 from chats.models import Message # Our Message model
 from chats.serializers import MessageSerializer # Our Serializer Classes
 
+
 # Users View
 @csrf_exempt
 def message_list(request, sender=None, receiver=None):

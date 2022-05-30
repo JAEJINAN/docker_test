@@ -1,3 +1,6 @@
-myenv
-tt.txt
-ml_models
+# basic ignore files
+mls
+packages
+secrets.json
+mls.tar
+packages.tar

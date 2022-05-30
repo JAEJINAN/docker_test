@@ -11,8 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from logging import root
-from config.my_settings import DATABASES, SECRET_KEY
+from config.configs import DJANGO_SECRET_KEY, MYSQL_ID, MYSQL_PASSWORD
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,24 +20,26 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# must be encrypted.
+SECRET_KEY = DJANGO_SECRET_KEY
+MYSQL_ID = MYSQL_ID
+MYSQL_PASSWORD = MYSQL_PASSWORD
 
-DATABASES = DATABASES
-SECRET_KEY = SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['34.234.93.104']
+ALLOWED_HOSTS = []
 
 
 # Application definition
 
 DJANGO_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
 ]
 
 PROJECT_APPS = [
@@ -57,13 +58,13 @@ INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -90,12 +91,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'user',
+        'USER': f'{MYSQL_ID}',
+        'PASSWORD': f'{MYSQL_PASSWORD}',
+        'HOST': 'localhost',
+        'PORT': '3306'
+    }
+}
 
 
 # Password validation
@@ -136,10 +141,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 
 MEDIA_URL = "/media/"
-
 
 # Auth
 
@@ -164,3 +170,6 @@ if not DEBUG:
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = [
         "rest_framework.renderers.JSONRenderer",
     ]
+    
+if __name__ == '__main__':
+    print(BASE_DIR)
